@@ -21,7 +21,7 @@ public class ExternalInventorySystem {
      * @param scannedItem contains the item identifier which will select which item information will return.
      * @return resembles an item and the information about it.
      */
-    public ItemDTO getItemInformation(ScannedItemDTO scannedItem) {
+    public ItemDTO getItemInformation(ScannedItemDTO scannedItem) throws InvalidItemIdentifierException {
         int itemID = scannedItem.getItemID();
         if(itemID == 69){
             throw new InventorySystemFailureException("Can not connect to item inventory database.\nPlease try again.\n");

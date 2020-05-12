@@ -41,7 +41,7 @@ class ReceiptTest {
     }
 
     @Test
-    public void testRightPrint(){
+    public void testRightPrint() throws SaleNotActiveException, InvalidItemIdentifierException {
         sale.addItemToSale(createItemAndQuantity(1,2));
         sale.addItemToSale(createItemAndQuantity(3,3));
         sale.endSale();
@@ -55,7 +55,7 @@ class ReceiptTest {
     }
 
 
-    private ItemAndQuantity createItemAndQuantity(int itemID, int quantity){
+    private ItemAndQuantity createItemAndQuantity(int itemID, int quantity) throws InvalidItemIdentifierException {
         ScannedItemDTO scannedItem = new ScannedItemDTO(itemID, quantity);
         return new ItemAndQuantity(exInvSys.getItemInformation(scannedItem), quantity);
     }

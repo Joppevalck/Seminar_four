@@ -7,13 +7,14 @@ import org.junit.jupiter.api.Test;
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.integration.ExternalSystemCreator;
 import se.kth.IV1350.seminarFour.integration.InvalidItemIdentifierException;
+import se.kth.IV1350.seminarFour.model.ItemAndQuantity;
 import se.kth.IV1350.seminarFour.model.SaleInformation;
+import se.kth.IV1350.seminarFour.model.SaleNotActiveException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ControllerTest {
     private Controller instanceToTest;
@@ -34,7 +35,6 @@ class ControllerTest {
     @AfterEach
     public void tearDown(){
         instanceToTest = null;
-
         printoutBuffer = null;
         System.setOut(originalSysOut);
     }
@@ -43,28 +43,33 @@ class ControllerTest {
     @Test
     public void testSaleStart(){
         instanceToTest.saleStart();
-        assertTrue(instanceToTest.toString().contains("Sale is active"),
+
+        assertTrue(instanceToTest.isSaleActive(),
                 "Sale did not start correctly");
     }
 
     @Test
-    public void testAddAllItemID(){
+    public void testAddAllItemID() throws InvalidItemIdentifierException, SaleNotActiveException {
 
         instanceToTest.saleStart();
         for (int i = 1; i < 6; i++){
             ScannedItemDTO scannedItem = new ScannedItemDTO(i, i);
-            String printout = instanceToTest.registerItem(scannedItem).toString();
-            String expectedOutput = i + "*";
-            assertTrue(printout.contains(expectedOutput),
+            instanceToTest.registerItem(scannedItem);
+            ItemAndQuantity item = instanceToTest.getLastItem();
+
+            assertTrue(checkLastItem(item, i),
                     "Item " + i + " did not get added.");
         }
     }
     @Test
-    public void testRegisterItemWithoutSaleStart(){
+    public void testRegisterItemWithoutSaleStart() throws InvalidItemIdentifierException, SaleNotActiveException {
 
         ScannedItemDTO scannedItem = new ScannedItemDTO(1, 1);
-        SaleInformation saleInfo = instanceToTest.registerItem(scannedItem);
-        assertNull(saleInfo, "RegisterItem went through without a saleStart.");
+        instanceToTest.registerItem(scannedItem);
+        String printout = printoutBuffer.toString();
+        String expectedOutput = "Sale not started";
+        assertTrue(printout.contains(expectedOutput),
+                "RegisterItem went through without a saleStart.");
     }
 
     @Test
@@ -81,8 +86,7 @@ class ControllerTest {
         instanceToTest.saleStart();
         instanceToTest.endSale();
 
-        String expectedOutput = "Sale is not active";
-        assertTrue(instanceToTest.toString().contains(expectedOutput),
+        assertFalse(instanceToTest.isSaleActive(),
                 "Sale did not end correctly");
     }
 
@@ -99,4 +103,7 @@ class ControllerTest {
         });
     }
 
+    private boolean checkLastItem(ItemAndQuantity item, int i){
+        return item.getItem().getItemID() == i && item.getQuantity() == i;
+    }
 }

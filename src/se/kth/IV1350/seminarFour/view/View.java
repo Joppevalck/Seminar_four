@@ -2,7 +2,6 @@ package se.kth.IV1350.seminarFour.view;
 
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.controller.Controller;
-import se.kth.IV1350.seminarFour.integration.InvalidItemIdentifierException;
 
 /**
  * This is a replacement or a faked version for the real view. It contains hardcoded execution to all call all system
@@ -45,21 +44,14 @@ public class View {
     private void runFakeRegisterItem(int itemID, int quantity){
         ScannedItemDTO scannedItem = new ScannedItemDTO(itemID, quantity);
         try {
-            updatedSaleInfo = ctrl.registerItem(scannedItem).toString();
-            if(updatedSaleInfo.contains("*")) {
-                System.out.println("Item " + itemID + " with " + quantity + " quantities has been added. \nThe new " +
-                        "saleinformation is:\n" + updatedSaleInfo + "\n");
-            }else{
-                System.out.println("Sale not active.\n");
-            }
+            this.ctrl.registerItem(scannedItem);
         }catch(Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     private void runFakeEndSale(){
-        double total = ctrl.endSale();
-        System.out.println("Amount to pay: " + total + "kr \n");
+        ctrl.endSale();
     }
 
     private void runFakePayment(int amountPaid){

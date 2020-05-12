@@ -1,10 +1,16 @@
 package se.kth.IV1350.seminarFour.controller;
 
 import se.kth.IV1350.seminarFour.DTOPackage.ItemDTO;
+import se.kth.IV1350.seminarFour.DTOPackage.RevenueDTO;
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.integration.*;
 import se.kth.IV1350.seminarFour.model.*;
+import se.kth.IV1350.seminarFour.view.EndOfSaleView;
+import se.kth.IV1350.seminarFour.view.ScannedItemView;
 import se.kth.IV1350.seminarFour.view.TotalRevenueView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *  This is the applications controller. All calls to the model goes through this class.
@@ -29,42 +35,37 @@ public class Controller {
 
     }
 
-    @Override
-    public String toString() {
-        return sale.isSaleActive() ? "Sale is active" : "Sale is not active";
-    }
-
     /**
      * Calls for a new sale to start. Creates an instance of the sale class.
      */
     public void saleStart(){
-        TotalRevenueView TotRevView = new TotalRevenueView(this);
-        this.sale = new Sale(TotRevView);
+        List<SaleObserver> observers = new ArrayList<>();
+        observers.add(new TotalRevenueView(this));
+        observers.add(new ScannedItemView(this));
+        observers.add(new EndOfSaleView(this));
+        this.sale = new Sale();
+        this.sale.addObservers(observers);
     }
 
     /**
      * Sends a request to add a item with the item identifier and quantity of the item.
+     *
      * @param scannedItem contains the item identifier and quantity.
-     * @return the updates sale information.
      */
-    public SaleInformation registerItem(ScannedItemDTO scannedItem){
-        if(sale == null){
-            return null;
+    public void registerItem(ScannedItemDTO scannedItem) throws SaleNotActiveException, InvalidItemIdentifierException {
+        try{
+            addNewItem(scannedItem);
+        } catch (NullPointerException Ne){
+            System.out.println("Sale not started, can not add items yet");
         }
-        else if(sale.isSaleActive()){
-            return addNewItem(scannedItem);
-        }
-        else{
-            return sale.getSaleInformation();
-        }
+
     }
 
     /**
      * Calls the sale to end the sale.
-     * @return what the customer has to pay for the item(s).
      */
-    public double endSale(){
-        return sale.endSale();
+    public void endSale(){
+        sale.endSale();
     }
 
     /**
@@ -79,14 +80,28 @@ public class Controller {
         return completedSale.getChange();
     }
 
-    public SaleInformation getSaleInformation(){
-        return sale.getSaleInformation();
-    }
-    public int getRunningTotal() {
-        return sale.getRunningTotal();
+    /**
+     * @return the running total and VAT total for the sale.
+     */
+    public RevenueDTO getRevenue() {
+        return sale.getRevenue();
     }
 
-    private ItemDTO getItem(ScannedItemDTO scannedItem) {
+    /**
+     * @return the last scanned and added item to the current sale.
+     */
+    public ItemAndQuantity getLastItem() {
+        return this.sale.getLastItem();
+    }
+
+    /**
+     * @return the state of the sale.
+     */
+    public boolean isSaleActive(){
+        return sale.isSaleActive();
+    }
+
+    private ItemDTO getItem(ScannedItemDTO scannedItem) throws InvalidItemIdentifierException {
             return exSysCreator.getExInvSys().getItemInformation(scannedItem);
     }
 
@@ -94,10 +109,10 @@ public class Controller {
         return new ItemAndQuantity(item, scannedItem.getQuantity());
     }
 
-    private SaleInformation addNewItem(ScannedItemDTO scannedItem){
+    private void addNewItem(ScannedItemDTO scannedItem) throws SaleNotActiveException, InvalidItemIdentifierException {
         ItemDTO item = getItem(scannedItem);
         ItemAndQuantity itemAndQuantity = mergeItemAndQuantity(item, scannedItem);
-        return sale.addItemToSale(itemAndQuantity);
+        sale.addItemToSale(itemAndQuantity);
     }
 
     private void updateExternalAndInternalSystems(CompletedSale completedSale){
@@ -111,7 +126,4 @@ public class Controller {
         Receipt receipt = new Receipt(completedSale);
         exSysCreator.getPrinter().printReceipt(receipt);
     }
-
-
-
 }

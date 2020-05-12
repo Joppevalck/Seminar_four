@@ -3,8 +3,11 @@ package se.kth.IV1350.seminarFour.view;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import se.kth.IV1350.seminarFour.DTOPackage.ItemDTO;
+import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.controller.Controller;
 import se.kth.IV1350.seminarFour.integration.ExternalSystemCreator;
+import se.kth.IV1350.seminarFour.integration.InvalidItemIdentifierException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -15,10 +18,11 @@ class ViewTest {
     private View instanceToTest;
     private ByteArrayOutputStream printoutBuffer;
     private PrintStream originalSysOut;
+    private ExternalSystemCreator exSysCreator;
 
     @BeforeEach
     public void setUp() {
-        ExternalSystemCreator exSysCreator = new ExternalSystemCreator();
+        exSysCreator = new ExternalSystemCreator();
         Controller ctrl = new Controller(exSysCreator);
         instanceToTest = new View(ctrl);
 
@@ -45,7 +49,7 @@ class ViewTest {
     }
 
     @Test
-    public void testRunFakeExecutionRegisterItem(){
+    public void testRunFakeExecutionRegisterItem() throws InvalidItemIdentifierException {
         instanceToTest.runFakeExecution();
         String printout = printoutBuffer.toString();
 
@@ -67,14 +71,15 @@ class ViewTest {
                 "UI did not start correctly.");
     }
 
-    private void testAddedItems(){
+    private void testAddedItems() throws InvalidItemIdentifierException {
         expectedRegItemID(1);
         expectedRegItemID(3);
     }
 
-    private void expectedRegItemID(int itemID){
-        String expectedOutput = "Item " + itemID;
-        assertTrue(printoutBuffer.toString().contains(expectedOutput),
+    private void expectedRegItemID(int itemID) throws InvalidItemIdentifierException {
+        ScannedItemDTO scannedItemDTO = new ScannedItemDTO(itemID, 1);
+        ItemDTO item = exSysCreator.getExInvSys().getItemInformation(scannedItemDTO);
+        assertTrue(printoutBuffer.toString().contains(item.getItemDescription()),
                 "Item " + itemID + " did not get added.");
     }
 
@@ -84,8 +89,8 @@ class ViewTest {
 
     }
 
-    private void expectedRunningPrice(int price){
-        String expectedOutput = "Total price: " + price + "kr\n";
+    private void expectedRunningPrice(double price){
+        String expectedOutput = "Total: " + price + "kr";
         assertTrue(printoutBuffer.toString().contains(expectedOutput),
                 "Running Total for price " + price + "kr not correct.");
     }

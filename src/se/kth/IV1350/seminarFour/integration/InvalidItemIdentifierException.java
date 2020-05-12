@@ -1,6 +1,6 @@
 package se.kth.IV1350.seminarFour.integration;
 
-public class InvalidItemIdentifierException extends java.lang.RuntimeException {
+public class InvalidItemIdentifierException extends Exception {
     private final String message;
 
     InvalidItemIdentifierException(String message) {

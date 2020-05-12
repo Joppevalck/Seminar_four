@@ -1,5 +1,7 @@
 package se.kth.IV1350.seminarFour.model;
 
+import se.kth.IV1350.seminarFour.DTOPackage.RevenueDTO;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,10 +15,10 @@ public class SaleInformation {
     private StoreLocation storeLocation;
     private HashMap<String, ItemAndQuantity> itemInventory;
     private ItemAndQuantity lastItemAdded;
-    private int runningTotal;
+    private double runningTotal;
     private double VAT;
 
-    private List<Observer> saleObservers = new ArrayList<>();
+    private List<SaleObserver> saleObservers = new ArrayList<>();
 
     /**
      * Creates an instance of SaleInformation. Initializes the sale information.
@@ -42,27 +44,36 @@ public class SaleInformation {
                 lastItemAdded.getItem().getVAT()*100 + "%";
     }
 
-    void addObserver(Observer observer){
+    /**
+     * Notifies the observers that the sale has ended.
+     */
+    public void notifyEndOfSale() {
+        for(SaleObserver observer : this.saleObservers){
+            observer.notifyEndOfSale();
+        }
+    }
+
+    void addObserver(SaleObserver observer){
         this.saleObservers.add(observer);
     }
 
-    SaleInformation addItem(ItemAndQuantity itemAndQuantity){
+    void addItem(ItemAndQuantity itemAndQuantity){
         addItemAndQuantity(itemAndQuantity);
         this.lastItemAdded = itemAndQuantity;
+        updateInventoryObserver();
         updatePrice();
-        return this;
+    }
+
+    RevenueDTO getRevenue(){
+        return new RevenueDTO(this.runningTotal, this.VAT);
     }
 
     void setLastItemAddedToNull(){
         lastItemAdded = null;
     }
 
-    int getRunningTotal(){
+    double getRunningTotal(){
         return runningTotal;
-    }
-
-    double getAmountToPay(){
-        return runningTotal+VAT;
     }
 
     CompletedSale completeSale(int amountPaid){
@@ -95,7 +106,9 @@ public class SaleInformation {
         else{
             this.itemInventory.put(itemDescription, itemAndQuantity);
         }
+
     }
+
     private void updatePrice(){
         ItemAndQuantity itemAndQuantity;
         this.runningTotal = 0;
@@ -141,8 +154,13 @@ public class SaleInformation {
     }
 
     private void updatePriceObserver(){
-        for(Observer observer : this.saleObservers){
-            observer.newPrice();
+        for(SaleObserver observer : this.saleObservers){
+            observer.updatedSalePrice();
+        }
+    }
+    private void updateInventoryObserver() {
+        for(SaleObserver observer : this.saleObservers){
+            observer.updatedSaleInventory();
         }
     }
 }

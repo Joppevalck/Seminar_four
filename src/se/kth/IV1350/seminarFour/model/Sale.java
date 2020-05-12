@@ -1,6 +1,10 @@
 package se.kth.IV1350.seminarFour.model;
 
 
+import se.kth.IV1350.seminarFour.DTOPackage.RevenueDTO;
+
+import java.util.List;
+
 /**
  * This is the main operator for the sale, all calls regarding the sale goes through this class.
  */
@@ -16,25 +20,16 @@ public class Sale {
     }
 
     /**
-     * Initializes a new sale. Creates a new instance of sale and adds an observer.
-     *
-     * @param observer is the class that observes sale.
-     */
-    public Sale(Observer observer){
-        initSale();
-        saleInfo.addObserver(observer);
-    }
-
-
-    /**
      * Adds a new item to the sale information and the inventory.
+     *
      * @param itemAndQuantity is the item the quantity that is going to be added.
-     * @return an updated sale information.
      */
-    public SaleInformation addItemToSale(ItemAndQuantity itemAndQuantity){
+    public void addItemToSale(ItemAndQuantity itemAndQuantity) throws SaleNotActiveException {
         if(saleActive)
-            return saleInfo.addItem(itemAndQuantity);
-        return saleInfo;
+            saleInfo.addItem(itemAndQuantity);
+        else{
+            throw new SaleNotActiveException("The sale is not active");
+        }
     }
 
     /**
@@ -54,13 +49,12 @@ public class Sale {
     }
 
     /**
-     * Calls to end the sale, notices the sale information class and inactivates the sale.
-     * @return the amount that the customers has to pay for the items.
+     * Calls to end the sale, notifies the sale information class and inactivates the sale.
      */
-    public double endSale(){
+    public void endSale(){
         saleActive = false;
         saleInfo.setLastItemAddedToNull();
-        return saleInfo.getAmountToPay();
+        saleInfo.notifyEndOfSale();
     }
 
     /**
@@ -73,8 +67,30 @@ public class Sale {
         return saleInfo.completeSale(amountPaid);
     }
 
-    public int getRunningTotal() {
-        return saleInfo.getRunningTotal();
+    /**
+     * @return the running total and VAT total for the sale.
+     */
+    public RevenueDTO getRevenue() {
+        return saleInfo.getRevenue();
+    }
+
+    /**
+     * Adds a specified observer to observe changes in this class.
+     *
+     * @param observer the observer that is going to get notified when there has been a change in the sale.
+     */
+    public void addObserver(SaleObserver observer){
+        saleInfo.addObserver(observer);
+    }
+
+    /**
+     * Adds multiple observers to observe changes in this class.
+     *
+     * @param observers the observers that is going to get notified when there has been a change in the sale.
+     */
+    public void addObservers(List<SaleObserver> observers) {
+        for(SaleObserver observer : observers)
+            saleInfo.addObserver(observer);
     }
 
     private void initSale(){
@@ -82,5 +98,10 @@ public class Sale {
         this.saleActive = true;
     }
 
-
+    /**
+     * @return the last item scanned and added to the sale inventory.
+     */
+    public ItemAndQuantity getLastItem() {
+        return getSaleInformation().getLastItemAdded();
+    }
 }

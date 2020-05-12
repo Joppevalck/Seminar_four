@@ -37,7 +37,7 @@ class ExternalInventorySystemTest {
     }
 
     @Test
-    public void testAddAllItemDescription(){
+    public void testAddAllItemDescription() throws InvalidItemIdentifierException {
         String expectedOutput;
         for (int i = 1; i < 6; i++){
             ScannedItemDTO scannedItem = new ScannedItemDTO(i, i);
@@ -82,7 +82,7 @@ class ExternalInventorySystemTest {
         });
     }
 
-    private ItemDTO specificScannedItem(int itemID, int quantity){
+    private ItemDTO specificScannedItem(int itemID, int quantity) throws InvalidItemIdentifierException {
         ScannedItemDTO scannedItem = new ScannedItemDTO(itemID, quantity);
         return instanceToTest.getItemInformation(scannedItem);
     }
