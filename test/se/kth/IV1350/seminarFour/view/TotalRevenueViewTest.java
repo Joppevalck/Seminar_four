@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import se.kth.IV1350.seminarFour.DTOPackage.ItemDTO;
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.controller.Controller;
+import se.kth.IV1350.seminarFour.integration.ExternalInventorySystem;
 import se.kth.IV1350.seminarFour.integration.ExternalSystemCreator;
 import se.kth.IV1350.seminarFour.integration.InvalidItemIdentifierException;
 import se.kth.IV1350.seminarFour.model.ItemAndQuantity;
@@ -69,11 +70,11 @@ class TotalRevenueViewTest {
 
     private ItemDTO specificScannedItem(int itemID, int quantity) throws InvalidItemIdentifierException {
         ScannedItemDTO scannedItem = new ScannedItemDTO(itemID, quantity);
-        return exSysCreator.getExInvSys().getItemInformation(scannedItem);
+        return ExternalInventorySystem.getInventorySystem().getItemInformation(scannedItem);
     }
 
     private ItemDTO getItemInformation(ScannedItemDTO scannedItem) throws InvalidItemIdentifierException {
-        return exSysCreator.getExInvSys().getItemInformation(scannedItem);
+        return ExternalInventorySystem.getInventorySystem().getItemInformation(scannedItem);
     }
 
     private double registerNewItemRunningTotal(int itemID, int quantity) throws InvalidItemIdentifierException,

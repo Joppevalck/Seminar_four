@@ -23,7 +23,7 @@ class ReceiptTest {
     @BeforeEach
     public void setUp() {
         sale = new Sale();
-        exInvSys = new ExternalInventorySystem();
+        exInvSys = ExternalInventorySystem.getInventorySystem();
 
         printoutBuffer = new ByteArrayOutputStream();
         PrintStream inMemSysOut = new PrintStream(printoutBuffer);

@@ -6,7 +6,6 @@ package se.kth.IV1350.seminarFour.integration;
  */
 public class ExternalSystemCreator {
     private ExternalAccountingSystem exAccSys;
-    private ExternalInventorySystem exInvSys;
 
     private Printer printer;
 
@@ -16,17 +15,11 @@ public class ExternalSystemCreator {
      */
     public ExternalSystemCreator(){
         this.exAccSys = new ExternalAccountingSystem();
-        this.exInvSys = new ExternalInventorySystem();
-
         this.printer = new Printer();
     }
 
     public ExternalAccountingSystem getExAccSys() {
         return exAccSys;
-    }
-
-    public ExternalInventorySystem getExInvSys() {
-        return exInvSys;
     }
 
     public Printer getPrinter() {

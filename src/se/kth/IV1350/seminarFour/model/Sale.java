@@ -28,7 +28,7 @@ public class Sale {
         if(saleActive)
             saleInfo.addItem(itemAndQuantity);
         else{
-            throw new SaleNotActiveException("The sale is not active");
+            throw new SaleNotActiveException("The sale is not active\n");
         }
     }
 

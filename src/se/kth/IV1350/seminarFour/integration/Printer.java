@@ -13,6 +13,6 @@ public class Printer {
      * @param receipt is the receipt that shall be printed.
      */
     public void printReceipt(Receipt receipt){
-        System.out.print(receipt);
+        System.out.print("***********************************\n\t\t\tRECEIPT\n" + receipt + "***********************************\n");
     }
 }

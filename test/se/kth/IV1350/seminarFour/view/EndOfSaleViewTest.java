@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import se.kth.IV1350.seminarFour.DTOPackage.ItemDTO;
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.controller.Controller;
+import se.kth.IV1350.seminarFour.integration.ExternalInventorySystem;
 import se.kth.IV1350.seminarFour.integration.ExternalSystemCreator;
 import se.kth.IV1350.seminarFour.integration.InvalidItemIdentifierException;
 import se.kth.IV1350.seminarFour.model.SaleNotActiveException;
@@ -60,12 +61,12 @@ class EndOfSaleViewTest {
         ctrl.saleStart();
         ctrl.endSale();
         String printout = printoutBuffer.toString();
-        String expectedPrintout = ""
-        assertTrue(printout.contains());
+        String expectedPrintout = "Amount to pay: ";
+        assertTrue(printout.contains(expectedPrintout), "End of sale did not notify observer.");
     }
 
     private ItemDTO getItemInformation(ScannedItemDTO scannedItem) throws InvalidItemIdentifierException {
-        return exSysCreator.getExInvSys().getItemInformation(scannedItem);
+        return ExternalInventorySystem.getInventorySystem().getItemInformation(scannedItem);
     }
 
     private double registerNewItemTotal(int itemID, int quantity) throws InvalidItemIdentifierException,

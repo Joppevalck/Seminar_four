@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import se.kth.IV1350.seminarFour.DTOPackage.ItemDTO;
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.controller.Controller;
+import se.kth.IV1350.seminarFour.integration.ExternalInventorySystem;
 import se.kth.IV1350.seminarFour.integration.ExternalSystemCreator;
 import se.kth.IV1350.seminarFour.integration.InvalidItemIdentifierException;
 
@@ -78,7 +79,7 @@ class ViewTest {
 
     private void expectedRegItemID(int itemID) throws InvalidItemIdentifierException {
         ScannedItemDTO scannedItemDTO = new ScannedItemDTO(itemID, 1);
-        ItemDTO item = exSysCreator.getExInvSys().getItemInformation(scannedItemDTO);
+        ItemDTO item = ExternalInventorySystem.getInventorySystem().getItemInformation(scannedItemDTO);
         assertTrue(printoutBuffer.toString().contains(item.getItemDescription()),
                 "Item " + itemID + " did not get added.");
     }

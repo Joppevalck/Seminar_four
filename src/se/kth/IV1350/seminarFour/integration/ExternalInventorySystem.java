@@ -11,11 +11,15 @@ import java.time.LocalDateTime;
  * hardcoded with a few items.
  */
 public class ExternalInventorySystem {
+    private static final ExternalInventorySystem exInvSys = new ExternalInventorySystem();
+
     private final ItemDTO[] items = { new ItemDTO("Banana", 1, 5, 0.12),
             new ItemDTO("Soda", 2, 15, 0.12),
             new ItemDTO("Book", 3, 49, 0.06),
             new ItemDTO("Frying Pan", 4, 299, 0.25),
             new ItemDTO("Bread", 5, 29, 0.12)};
+
+    private ExternalInventorySystem(){}
 
     /**
      * This will get the iteminformation from the hardcoded database.
@@ -35,6 +39,13 @@ public class ExternalInventorySystem {
         }catch(ArrayIndexOutOfBoundsException Ae){
             throw new InvalidItemIdentifierException("Item ID ("+scannedItem.getItemID()+") is invalid. \n");
         }
+    }
+
+    /**
+     * @return the only instance of the class.
+     */
+    public static ExternalInventorySystem getInventorySystem(){
+        return exInvSys;
     }
 
     private boolean checkItemID(ScannedItemDTO scannedItem){

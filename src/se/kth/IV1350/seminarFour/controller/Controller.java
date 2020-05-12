@@ -102,7 +102,7 @@ public class Controller {
     }
 
     private ItemDTO getItem(ScannedItemDTO scannedItem) throws InvalidItemIdentifierException {
-            return exSysCreator.getExInvSys().getItemInformation(scannedItem);
+            return ExternalInventorySystem.getInventorySystem().getItemInformation(scannedItem);
     }
 
     private ItemAndQuantity mergeItemAndQuantity(ItemDTO item, ScannedItemDTO scannedItem){
@@ -117,7 +117,7 @@ public class Controller {
 
     private void updateExternalAndInternalSystems(CompletedSale completedSale){
         exSysCreator.getExAccSys().updateAccounting(completedSale);
-        exSysCreator.getExInvSys().updateInventory(completedSale);
+        ExternalInventorySystem.getInventorySystem().updateInventory(completedSale);
         register.updateRegisterCash(completedSale);
         saleLog.logCompletedSale(completedSale);
     }

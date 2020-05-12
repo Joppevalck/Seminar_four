@@ -21,7 +21,7 @@ class SaleTest {
 
     @BeforeEach
     public void setUp() {
-        exInvSys = new ExternalInventorySystem();
+        exInvSys = ExternalInventorySystem.getInventorySystem();
         instanceToTest = new Sale();
 
         printoutBuffer = new ByteArrayOutputStream();

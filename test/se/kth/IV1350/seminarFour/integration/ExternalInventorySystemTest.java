@@ -20,7 +20,7 @@ class ExternalInventorySystemTest {
     @BeforeEach
     public void setUp() {
 
-        instanceToTest = new ExternalInventorySystem();
+        instanceToTest = ExternalInventorySystem.getInventorySystem();
 
         printoutBuffer = new ByteArrayOutputStream();
         PrintStream inMemSysOut = new PrintStream(printoutBuffer);
