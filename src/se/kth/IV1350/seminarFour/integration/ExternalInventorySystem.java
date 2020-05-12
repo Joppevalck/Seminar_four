@@ -3,6 +3,8 @@ package se.kth.IV1350.seminarFour.integration;
 import se.kth.IV1350.seminarFour.DTOPackage.ItemDTO;
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.model.CompletedSale;
+import java.time.LocalDateTime;
+
 
 /**
  * This class resembles a database where all the item information of the store lies. In this seminar it will be
@@ -24,7 +26,8 @@ public class ExternalInventorySystem {
     public ItemDTO getItemInformation(ScannedItemDTO scannedItem) throws InvalidItemIdentifierException {
         int itemID = scannedItem.getItemID();
         if(itemID == 69){
-            throw new InventorySystemFailureException("Can not connect to item inventory database.\nPlease try again.\n");
+            throw new InventorySystemFailureException("To developer: Could not get item information from inventory " +
+                    "database, unable to connect. ItemID: " + itemID + " Date and time: " + LocalDateTime.now() + "\n");
         }
 
         try{
