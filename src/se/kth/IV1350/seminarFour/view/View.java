@@ -58,4 +58,8 @@ public class View {
         double change = ctrl.payment(amountPaid);
         System.out.println("\nChange: " + change);
     }
+
+    private void runFakeDiscountSignal(int customerID){
+        ctrl.discount(customerID);
+    }
 }

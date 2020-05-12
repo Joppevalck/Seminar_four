@@ -126,4 +126,8 @@ public class Controller {
         Receipt receipt = new Receipt(completedSale);
         exSysCreator.getPrinter().printReceipt(receipt);
     }
+
+    public void discount(int customerID) {
+        sale.discount(customerID);
+    }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 public class Sale {
     private SaleInformation saleInfo;
     private boolean saleActive;
+    private DiscountCaluclator discountCaluclator;
 
     /**
      * Initializes a new sale. Creates a new instance of sale.
@@ -103,5 +104,9 @@ public class Sale {
      */
     public ItemAndQuantity getLastItem() {
         return getSaleInformation().getLastItemAdded();
+    }
+
+    public void discount(int customerID) {
+
     }
 }
