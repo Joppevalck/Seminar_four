@@ -12,7 +12,7 @@ import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InvalidItemIdentifierExceptionTest {
+class InventorySystemFailureExceptionTest {
     private Controller ctrl;
     private ByteArrayOutputStream printoutBuffer;
     private PrintStream originalSysOut;
@@ -36,15 +36,18 @@ class InvalidItemIdentifierExceptionTest {
     }
 
     @Test
-    public void testRightPrintout() throws SaleNotActiveException {
+    public void testRightPrintout() throws SaleNotActiveException, InvalidItemIdentifierException {
         ctrl.saleStart();
         ctrl.endSale();
-        ScannedItemDTO scannedItem = new ScannedItemDTO(0, 1);
-        String expectedOutput = "Item ID ("+scannedItem.getItemID()+") is invalid.";
+        ScannedItemDTO scannedItem = new ScannedItemDTO(69, 1);
+        String expectedOutputToDev = "To developer: Could not get item information from inventory";
+        String expectedOutputToUser = "Could not get information from database, please check your connection and try" +
+                " again";
         try {
             ctrl.registerItem(scannedItem);
-        }catch(InvalidItemIdentifierException e){
-            assertTrue(e.getMessage().contains(expectedOutput), "Wrong exception message");
+        }catch(InventorySystemFailureException e){
+            assertTrue(e.getMessageToDeveloper().contains(expectedOutputToDev), "Wrong exception message");
+            assertTrue(e.getMessage().contains(expectedOutputToUser), "Wrong exception message");
         }
     }
 
@@ -52,9 +55,10 @@ class InvalidItemIdentifierExceptionTest {
     public void testException() {
         ctrl.saleStart();
         ctrl.endSale();
-        assertThrows(InvalidItemIdentifierException.class, () -> {
-            ctrl.registerItem(new ScannedItemDTO(42348,2));
+        assertThrows(InventorySystemFailureException.class, () -> {
+            ctrl.registerItem(new ScannedItemDTO(69,2));
         });
     }
+
 
 }
