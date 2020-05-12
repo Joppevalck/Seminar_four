@@ -6,7 +6,6 @@ package se.kth.IV1350.seminarFour.integration;
  */
 public class ExternalSystemCreator {
     private ExternalAccountingSystem exAccSys;
-
     private Printer printer;
 
     /**
