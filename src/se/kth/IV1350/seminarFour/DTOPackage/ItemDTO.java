@@ -6,8 +6,10 @@ package se.kth.IV1350.seminarFour.DTOPackage;
 public class ItemDTO {
     private String itemDescription;
     private int itemID;
-    private int price;
+    private double price;
     private double VAT;
+    private double discountPercentage = 0;
+    private double discountPrice = 0;
 
     /**
      * Creates an instance of the class. It sets the attribute's value.
@@ -44,8 +46,15 @@ public class ItemDTO {
      * Gets the item's price.
      * @return the item's price
      */
-    public int getPrice() {
-        return price;
+    public double getPrice() {
+        if (discountPercentage == 0 && discountPrice == 0)
+            return price;
+        else if(discountPercentage != 0){
+            return price * (1 - discountPercentage);
+        }else{
+            return price - discountPrice;
+        }
+
     }
     /**
      * Gets the item's VAT rate.
@@ -54,4 +63,12 @@ public class ItemDTO {
     public double getVAT() {
         return VAT;
     }
+
+    public void applyDiscountPercent(double discount){
+        this.discountPercentage = discount;
+    }
+    public void applyDiscountPrice(double discount){
+        this.discountPrice = discount;
+    }
+
 }

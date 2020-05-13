@@ -46,10 +46,10 @@ public class Receipt {
     private void storeCompletedSaleInformation(CompletedSale compSale){
         this.saleDateAndTime = compSale.getSaleDateAndTime();
         this.storeLocation = compSale.getStoreLocation();
-        this.runningTotal = compSale.getRunningTotal();
+        this.runningTotal = roundOff(compSale.getRunningTotal());
         this.amountPaid = compSale.getAmountPaid();
         this.change = compSale.getChange();
-        this.VAT = compSale.getVAT();
+        this.VAT = roundOff(compSale.getVAT());
     }
 
     private void getAllItemInformation(CompletedSale compSale){
@@ -65,7 +65,11 @@ public class Receipt {
     private ItemNameQuantityPrice createItemAndPriceObject(ItemAndQuantity itemAndQuantity){
         String name = itemAndQuantity.getItem().getItemDescription();
         int quantity = itemAndQuantity.getQuantity();
-        int price = itemAndQuantity.getItem().getPrice();
+        double price = itemAndQuantity.getItem().getPrice();
         return new ItemNameQuantityPrice(name, quantity, price);
+    }
+
+    private double roundOff(double price){
+        return Math.round(price * 100.0) / 100.0;
     }
 }

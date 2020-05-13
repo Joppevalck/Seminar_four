@@ -52,7 +52,7 @@ class EndOfSaleViewTest {
 
         ctrl.endSale();
         String printout = printoutBuffer.toString();
-        assertTrue(printout.contains("Amount to pay: " + total ), "Wrong amount to pay. Expected Amount: " +
+        assertTrue(printout.contains("Amount to pay: " + roundOff(total) ), "Wrong amount to pay. Expected Amount: " +
                 total + " Printed: " + printout);
     }
 
@@ -84,4 +84,9 @@ class EndOfSaleViewTest {
     private double itemTotalVAT(ItemDTO item, int quantity) {
         return item.getVAT() * item.getPrice() * quantity;
     }
+
+    private double roundOff(double price){
+        return Math.round(price * 100.0) / 100.0;
+    }
+
 }

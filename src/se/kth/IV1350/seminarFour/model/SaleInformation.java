@@ -1,6 +1,9 @@
 package se.kth.IV1350.seminarFour.model;
 
+import se.kth.IV1350.seminarFour.DTOPackage.CustomerID;
 import se.kth.IV1350.seminarFour.DTOPackage.RevenueDTO;
+import se.kth.IV1350.seminarFour.integration.DiscountHandler;
+import se.kth.IV1350.seminarFour.integration.NoDiscountsException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -53,6 +56,11 @@ public class SaleInformation {
         }
     }
 
+    void discount(CustomerID customerID) throws NoDiscountsException {
+        DiscountHandler.getDiscountHandler().applyDiscount(customerID, this.itemInventory);
+        updatePrice();
+    }
+
     void addObserver(SaleObserver observer){
         this.saleObservers.add(observer);
     }
@@ -62,6 +70,7 @@ public class SaleInformation {
         this.lastItemAdded = itemAndQuantity;
         updateInventoryObserver();
         updatePrice();
+        updatePriceObserver();
     }
 
     RevenueDTO getRevenue(){
@@ -114,10 +123,9 @@ public class SaleInformation {
         this.runningTotal = 0;
         for(String itemDescription : this.itemInventory.keySet() ){
             itemAndQuantity = this.itemInventory.get(itemDescription);
-            this.runningTotal += itemAndQuantity.getQuantity()*itemAndQuantity.getItem().getPrice();
+            this.runningTotal += itemAndQuantity.getQuantity()*(itemAndQuantity.getItem().getPrice());
         }
         calculateVAT();
-        updatePriceObserver();
     }
     private void calculateVAT(){
         this.VAT = 0;
