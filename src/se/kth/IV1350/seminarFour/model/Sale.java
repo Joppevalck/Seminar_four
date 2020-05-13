@@ -1,7 +1,8 @@
 package se.kth.IV1350.seminarFour.model;
 
-
+import se.kth.IV1350.seminarFour.DTOPackage.CustomerID;
 import se.kth.IV1350.seminarFour.DTOPackage.RevenueDTO;
+import se.kth.IV1350.seminarFour.integration.NoDiscountsException;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public class Sale {
     private SaleInformation saleInfo;
     private boolean saleActive;
-    private DiscountCaluclator discountCaluclator;
+    private DiscountCalculator discountCalculator;
 
     /**
      * Initializes a new sale. Creates a new instance of sale.
@@ -106,7 +107,13 @@ public class Sale {
         return getSaleInformation().getLastItemAdded();
     }
 
-    public void discount(int customerID) {
+    public void discount(CustomerID customerID) throws NoDiscountsException, SaleNotActiveException {
 
+        if(!saleActive) {
+            this.saleInfo.discount(customerID);
+            this.saleInfo.notifyEndOfSale();
+        }else{
+            throw new SaleNotActiveException("The sale is still active\n");
+        }
     }
 }

@@ -1,7 +1,9 @@
 package se.kth.IV1350.seminarFour.view;
 
+import se.kth.IV1350.seminarFour.DTOPackage.CustomerID;
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.controller.Controller;
+import se.kth.IV1350.seminarFour.integration.NoDiscountsException;
 
 /**
  * This is a replacement or a faked version for the real view. It contains hardcoded execution to all call all system
@@ -9,7 +11,6 @@ import se.kth.IV1350.seminarFour.controller.Controller;
  */
 public class View {
     private Controller ctrl;
-    private String updatedSaleInfo;
 
     /**
      * Creates an instance of View, keeps track of an instance of the class Controller.
@@ -23,7 +24,7 @@ public class View {
     /**
      * Simulates a sale, calls all public methods from the Controller class.
      */
-    public void runFakeExecution(){
+    public void runFakeExecution() {
         runFakeSaleStart();
         runFakeRegisterItem(1, 2);
         runFakeRegisterItem(3, 3);
@@ -31,8 +32,12 @@ public class View {
         runFakeRegisterItem(69,69);
 
         runFakeEndSale();
+
+        runFakeDiscountSignal(11);
+
         runFakeRegisterItem(2, 1);
         runFakePayment(200);
+
 
     }
 
@@ -60,6 +65,10 @@ public class View {
     }
 
     private void runFakeDiscountSignal(int customerID){
-        ctrl.discount(customerID);
+        try {
+            ctrl.discount(new CustomerID(customerID));
+        }catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

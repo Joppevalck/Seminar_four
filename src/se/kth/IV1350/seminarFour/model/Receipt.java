@@ -65,7 +65,7 @@ public class Receipt {
     private ItemNameQuantityPrice createItemAndPriceObject(ItemAndQuantity itemAndQuantity){
         String name = itemAndQuantity.getItem().getItemDescription();
         int quantity = itemAndQuantity.getQuantity();
-        int price = itemAndQuantity.getItem().getPrice();
+        double price = itemAndQuantity.getItem().getPrice();
         return new ItemNameQuantityPrice(name, quantity, price);
     }
 }

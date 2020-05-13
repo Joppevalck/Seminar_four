@@ -6,7 +6,7 @@ package se.kth.IV1350.seminarFour.DTOPackage;
 public class ItemDTO {
     private String itemDescription;
     private int itemID;
-    private int price;
+    private double price;
     private double VAT;
 
     /**
@@ -44,7 +44,7 @@ public class ItemDTO {
      * Gets the item's price.
      * @return the item's price
      */
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
     /**
@@ -54,4 +54,12 @@ public class ItemDTO {
     public double getVAT() {
         return VAT;
     }
+
+    public void applyDiscountPercent(double discount){
+        this.price -= this.price * discount;
+    }
+    public void applyDiscountPrice(double discount){
+        this.price -= discount;
+    }
+
 }

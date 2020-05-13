@@ -1,5 +1,6 @@
 package se.kth.IV1350.seminarFour.controller;
 
+import se.kth.IV1350.seminarFour.DTOPackage.CustomerID;
 import se.kth.IV1350.seminarFour.DTOPackage.ItemDTO;
 import se.kth.IV1350.seminarFour.DTOPackage.RevenueDTO;
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
@@ -127,7 +128,11 @@ public class Controller {
         exSysCreator.getPrinter().printReceipt(receipt);
     }
 
-    public void discount(int customerID) {
-        sale.discount(customerID);
+    public void discount(CustomerID customerID) throws SaleNotActiveException {
+        try {
+            sale.discount(customerID);
+        } catch (NoDiscountsException e){
+            System.out.println(e.getMessage());
+        }
     }
 }
