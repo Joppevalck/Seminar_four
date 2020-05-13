@@ -35,7 +35,7 @@ public class ExternalInventorySystem {
         }
 
         try{
-            return this.items[itemID - 1];
+            return new ItemDTO(this.items[itemID - 1]);
         }catch(ArrayIndexOutOfBoundsException Ae){
             throw new InvalidItemIdentifierException("Item ID ("+scannedItem.getItemID()+") is invalid. \n");
         }

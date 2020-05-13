@@ -60,7 +60,7 @@ class ViewTest {
         testAddedItems();
 
     }
-    @Test @Disabled
+    @Test
     public void testRunFakeExecutionRegisterItem() throws InvalidItemIdentifierException {
         instanceToTest.runFakeExecution();
         String printout = printoutBuffer.toString();

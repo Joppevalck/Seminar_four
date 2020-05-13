@@ -26,6 +26,12 @@ public class ItemDTO {
         this.VAT = VAT;
     }
 
+    public ItemDTO(ItemDTO item){
+        this.itemDescription = item.getItemDescription();
+        this.itemID = item.getItemID();
+        this.price = item.getPrice();
+        this.VAT = item.getVAT();
+    }
     /**
      * Gets the item's description
      *
