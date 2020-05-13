@@ -65,7 +65,7 @@ class SaleInformationTest {
         }
     }
 
-    @Test @Disabled
+    @Test
     public void testRunningTotal() throws InvalidItemIdentifierException {
 
         int runningTotal = 0;
