@@ -42,6 +42,8 @@ public class EndOfSaleView implements SaleObserver {
     @Override
     public void notifyEndOfSale() {
         this.revenue = this.ctrl.getRevenue();
-        System.out.println("Amount to pay: " + (revenue.getRunningTotal() + revenue.getVAT()) + "kr \n");
+        double totalAmount = revenue.getRunningTotal() + revenue.getVAT();
+        double roundOff = Math.round(totalAmount * 100.0) / 100.0;
+        System.out.println("Amount to pay: " + roundOff + "kr \n");
     }
 }

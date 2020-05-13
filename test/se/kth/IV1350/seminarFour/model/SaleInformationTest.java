@@ -2,6 +2,7 @@ package se.kth.IV1350.seminarFour.model;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.integration.ExternalInventorySystem;
@@ -64,7 +65,7 @@ class SaleInformationTest {
         }
     }
 
-    @Test
+    @Test @Disabled
     public void testRunningTotal() throws InvalidItemIdentifierException {
 
         int runningTotal = 0;

@@ -7,7 +7,8 @@ public class ItemNameQuantityPrice {
         ItemNameQuantityPrice(String name, int quantity, double price){
             this.name = name;
             this.quantity = quantity;
-            this.price = price;
+            double roundOff = Math.round(price * 100.0) / 100.0;
+            this.price = roundOff;
         }
 
     @Override

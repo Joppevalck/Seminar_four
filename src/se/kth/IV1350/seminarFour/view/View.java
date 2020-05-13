@@ -33,6 +33,20 @@ public class View {
 
         runFakeEndSale();
 
+        runFakeRegisterItem(2, 1);
+        runFakePayment(200);
+
+
+    }
+    public void runFakeExecutionWithDiscount() {
+        runFakeSaleStart();
+        runFakeRegisterItem(1, 2);
+        runFakeRegisterItem(3, 3);
+        runFakeRegisterItem(6,6);
+        runFakeRegisterItem(69,69);
+
+        runFakeEndSale();
+
         runFakeDiscountSignal(11);
 
         runFakeRegisterItem(2, 1);

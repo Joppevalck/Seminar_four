@@ -19,6 +19,6 @@ public class Main {
         ExternalSystemCreator exSysCreator = new ExternalSystemCreator();
         Controller ctrl = new Controller(exSysCreator);
         View view = new View(ctrl);
-        view.runFakeExecution();
+        view.runFakeExecutionWithDiscount();
     }
 }

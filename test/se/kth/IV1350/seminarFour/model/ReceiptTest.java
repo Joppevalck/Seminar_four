@@ -48,9 +48,9 @@ class ReceiptTest {
         instanceToTest = new Receipt(sale.payment(1000));
 
         String printout = instanceToTest.toString();
-        String expectedOutput = "3 * Book\t49kr \n2 * Banana\t5kr";
+        String expectedOutput = "3 * Book\t49.0kr \n2 * Banana";
         assertTrue(printout.contains(expectedOutput),
-                "Receipt Print was not right" );
+                "Receipt Print was not right. Printed: \n" + printout );
 
     }
 

@@ -123,7 +123,7 @@ public class SaleInformation {
         this.runningTotal = 0;
         for(String itemDescription : this.itemInventory.keySet() ){
             itemAndQuantity = this.itemInventory.get(itemDescription);
-            this.runningTotal += itemAndQuantity.getQuantity()*itemAndQuantity.getItem().getPrice();
+            this.runningTotal += itemAndQuantity.getQuantity()*(itemAndQuantity.getItem().getPrice());
         }
         calculateVAT();
     }

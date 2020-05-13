@@ -10,8 +10,12 @@ import java.util.HashMap;
  * Composite class that combines two discounts, in this seminar it is hardcoded to discount one and two.
  */
 public class CombinedDiscount implements DiscountCalculator {
+    private ArrayList<DiscountCalculator> calculators = new ArrayList<>();
 
-    CombinedDiscount(){}
+    CombinedDiscount() {
+        calculators.add(new BananaDiscount());
+        calculators.add(new TwoBooksForOneDiscount());
+    }
 
     /**
      * Combines two calculators, Banana and Books discount, and applies the discounts.
@@ -19,9 +23,6 @@ public class CombinedDiscount implements DiscountCalculator {
      */
     @Override
     public void calculate(HashMap<String, ItemAndQuantity> itemInventory) {
-        ArrayList<DiscountCalculator> calculators = new ArrayList<>();
-        calculators.add(new BananaDiscount());
-        calculators.add(new TwoBooksForOneDiscount());
 
         for (DiscountCalculator discCalc : calculators)
             discCalc.calculate(itemInventory);
