@@ -11,13 +11,17 @@ import se.kth.IV1350.seminarFour.integration.ExternalSystemCreator;
 import se.kth.IV1350.seminarFour.integration.InvalidItemIdentifierException;
 import se.kth.IV1350.seminarFour.model.ItemAndQuantity;
 import se.kth.IV1350.seminarFour.model.SaleNotActiveException;
+import se.kth.IV1350.seminarFour.model.SaleObserver;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TotalRevenueViewTest {
+    private List<SaleObserver> observers;
     private Controller ctrl;
     private ByteArrayOutputStream printoutBuffer;
     private PrintStream originalSysOut;
@@ -27,6 +31,8 @@ class TotalRevenueViewTest {
     public void setUp() {
         exSysCreator = new ExternalSystemCreator();
         ctrl = new Controller(exSysCreator);
+        observers = new ArrayList<>();
+        observers.add(new TotalRevenueView());
 
         printoutBuffer = new ByteArrayOutputStream();
         PrintStream inMemSysOut = new PrintStream(printoutBuffer);
@@ -37,6 +43,8 @@ class TotalRevenueViewTest {
     @AfterEach
     public void tearDown(){
         ctrl = null;
+        observers = null;
+        exSysCreator = null;
 
         printoutBuffer = null;
         System.setOut(originalSysOut);
@@ -45,7 +53,7 @@ class TotalRevenueViewTest {
     @Test
     public void testRunningTotal() throws InvalidItemIdentifierException, SaleNotActiveException {
         double runningTotal = 0;
-        ctrl.saleStart();
+        ctrl.saleStart(observers);
 
         runningTotal += registerNewItemRunningTotal(2,4);
         checkRunningTotal(runningTotal);
@@ -58,7 +66,7 @@ class TotalRevenueViewTest {
     @Test
     public void testTotalVAT() throws InvalidItemIdentifierException, SaleNotActiveException {
         double VAT = 0;
-        ctrl.saleStart();
+        ctrl.saleStart(observers);
 
         VAT += registerNewItemVAT(2,4);
         checkTotalVAT(VAT);

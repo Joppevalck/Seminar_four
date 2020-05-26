@@ -2,6 +2,7 @@ package se.kth.IV1350.seminarFour.view;
 
 import se.kth.IV1350.seminarFour.DTOPackage.RevenueDTO;
 import se.kth.IV1350.seminarFour.controller.Controller;
+import se.kth.IV1350.seminarFour.model.ItemAndQuantity;
 import se.kth.IV1350.seminarFour.model.SaleObserver;
 
 
@@ -11,15 +12,11 @@ import se.kth.IV1350.seminarFour.model.SaleObserver;
 public class TotalRevenueView implements SaleObserver {
     private double runningTotal;
     private double VAT;
-    private Controller ctrl;
 
     /**
      * Creates an instance of the class. Sets all values to zero and applies a controller to get information from.
-     *
-     * @param ctrl is the controller that the class will get information from.
      */
-    public TotalRevenueView(Controller ctrl){
-        this.ctrl = ctrl;
+    TotalRevenueView(){
         this.runningTotal = 0;
         this.VAT = 0;
     }
@@ -28,15 +25,14 @@ public class TotalRevenueView implements SaleObserver {
      * Null block, will get notified but will not do anything.
      */
     @Override
-    public void updatedSaleInventory() {
+    public void updatedSaleInventory(ItemAndQuantity lastItem) {
     }
 
     /**
      * This method will update the presented running total in the UI. Displays running total and VAT total.
      */
     @Override
-    public void updatedSalePrice() {
-        RevenueDTO revenue = ctrl.getRevenue();
+    public void updatedSalePrice(RevenueDTO revenue) {
         this.runningTotal = revenue.getRunningTotal();
         this.VAT = revenue.getVAT();
         String separator = "=======================\n";
@@ -48,7 +44,7 @@ public class TotalRevenueView implements SaleObserver {
      * Null block, will get notified but will not do anything.
      */
     @Override
-    public void notifyEndOfSale() {
+    public void notifyEndOfSale(RevenueDTO revenue) {
 
     }
 }

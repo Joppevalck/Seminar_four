@@ -4,6 +4,10 @@ import se.kth.IV1350.seminarFour.DTOPackage.CustomerID;
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.controller.Controller;
 import se.kth.IV1350.seminarFour.integration.NoDiscountsException;
+import se.kth.IV1350.seminarFour.model.SaleObserver;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is a replacement or a faked version for the real view. It contains hardcoded execution to all call all system
@@ -11,6 +15,7 @@ import se.kth.IV1350.seminarFour.integration.NoDiscountsException;
  */
 public class View {
     private Controller ctrl;
+    private List<SaleObserver> observers = new ArrayList<>();
 
     /**
      * Creates an instance of View, keeps track of an instance of the class Controller.
@@ -38,6 +43,9 @@ public class View {
 
 
     }
+    /**
+     * Simulates a sale, calls all public methods from the Controller class, including the discount feature.
+     */
     public void runFakeExecutionWithDiscount() {
         runFakeSaleStart();
         runFakeRegisterItem(1, 2);
@@ -56,8 +64,15 @@ public class View {
     }
 
     private void runFakeSaleStart(){
-        ctrl.saleStart();
+        addObservers();
+        ctrl.saleStart(observers);
         System.out.println("A new sale has started.\n");
+    }
+
+    private void addObservers() {
+        observers.add(new TotalRevenueView());
+        observers.add(new ScannedItemView());
+        observers.add(new EndOfSaleView());
     }
 
     private void runFakeRegisterItem(int itemID, int quantity){

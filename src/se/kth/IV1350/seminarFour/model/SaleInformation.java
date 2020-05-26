@@ -51,8 +51,9 @@ public class SaleInformation {
      * Notifies the observers that the sale has ended.
      */
     public void notifyEndOfSale() {
+        RevenueDTO revenue = new RevenueDTO(this.runningTotal, this.VAT);
         for(SaleObserver observer : this.saleObservers){
-            observer.notifyEndOfSale();
+            observer.notifyEndOfSale(revenue);
         }
     }
 
@@ -162,13 +163,14 @@ public class SaleInformation {
     }
 
     private void updatePriceObserver(){
+        RevenueDTO revenue = new RevenueDTO(this.runningTotal, this.VAT);
         for(SaleObserver observer : this.saleObservers){
-            observer.updatedSalePrice();
+            observer.updatedSalePrice(revenue);
         }
     }
     private void updateInventoryObserver() {
         for(SaleObserver observer : this.saleObservers){
-            observer.updatedSaleInventory();
+            observer.updatedSaleInventory(this.lastItemAdded);
         }
     }
 }

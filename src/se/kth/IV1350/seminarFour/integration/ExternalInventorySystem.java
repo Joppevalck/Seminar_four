@@ -26,6 +26,7 @@ public class ExternalInventorySystem {
      *
      * @param scannedItem contains the item identifier which will select which item information will return.
      * @return resembles an item and the information about it.
+     * @throws InvalidItemIdentifierException is thrown when an invalid item identifier is registered.
      */
     public ItemDTO getItemInformation(ScannedItemDTO scannedItem) throws InvalidItemIdentifierException {
         int itemID = scannedItem.getItemID();
@@ -40,7 +41,7 @@ public class ExternalInventorySystem {
             throw new InvalidItemIdentifierException("Item ID ("+scannedItem.getItemID()+") is invalid. \n");
         }
     }
-
+    
     /**
      * @return the only instance of the class.
      */

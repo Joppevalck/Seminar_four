@@ -2,6 +2,7 @@ package se.kth.IV1350.seminarFour.view;
 
 import se.kth.IV1350.seminarFour.DTOPackage.RevenueDTO;
 import se.kth.IV1350.seminarFour.controller.Controller;
+import se.kth.IV1350.seminarFour.model.ItemAndQuantity;
 import se.kth.IV1350.seminarFour.model.SaleObserver;
 
 /**
@@ -9,30 +10,26 @@ import se.kth.IV1350.seminarFour.model.SaleObserver;
  */
 public class EndOfSaleView implements SaleObserver {
     private RevenueDTO revenue;
-    private Controller ctrl;
 
     /**
      * Creates an instance of the class. Sets a controller to get information from.
-     *
-     * @param ctrl the controller that the class will get information from.
      */
-    public EndOfSaleView(Controller ctrl) {
-        this.ctrl = ctrl;
+    EndOfSaleView() {
+            }
+
+    /**
+     * Null block, will get notified but will not do anything.
+     */
+    @Override
+    public void updatedSaleInventory(ItemAndQuantity lastItem) {
+
     }
 
     /**
      * Null block, will get notified but will not do anything.
      */
     @Override
-    public void updatedSaleInventory() {
-
-    }
-
-    /**
-     * Null block, will get notified but will not do anything.
-     */
-    @Override
-    public void updatedSalePrice() {
+    public void updatedSalePrice(RevenueDTO revenue) {
 
     }
 
@@ -40,8 +37,8 @@ public class EndOfSaleView implements SaleObserver {
      * When sale is ended this class will present the end total.
      */
     @Override
-    public void notifyEndOfSale() {
-        this.revenue = this.ctrl.getRevenue();
+    public void notifyEndOfSale(RevenueDTO revenue) {
+        this.revenue = revenue;
         double totalAmount = revenue.getRunningTotal() + revenue.getVAT();
         double roundOff = Math.round(totalAmount * 100.0) / 100.0;
         System.out.println("Amount to pay: " + roundOff + "kr \n");

@@ -10,13 +10,17 @@ import se.kth.IV1350.seminarFour.integration.ExternalInventorySystem;
 import se.kth.IV1350.seminarFour.integration.ExternalSystemCreator;
 import se.kth.IV1350.seminarFour.integration.InvalidItemIdentifierException;
 import se.kth.IV1350.seminarFour.model.SaleNotActiveException;
+import se.kth.IV1350.seminarFour.model.SaleObserver;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class EndOfSaleViewTest {
+    private List<SaleObserver> observers;
     private Controller ctrl;
     private ByteArrayOutputStream printoutBuffer;
     private PrintStream originalSysOut;
@@ -26,6 +30,8 @@ class EndOfSaleViewTest {
     public void setUp() {
         exSysCreator = new ExternalSystemCreator();
         ctrl = new Controller(exSysCreator);
+        observers = new ArrayList<>();
+        observers.add(new EndOfSaleView());
 
         printoutBuffer = new ByteArrayOutputStream();
         PrintStream inMemSysOut = new PrintStream(printoutBuffer);
@@ -36,6 +42,8 @@ class EndOfSaleViewTest {
     @AfterEach
     public void tearDown(){
         ctrl = null;
+        observers = null;
+        exSysCreator = null;
 
         printoutBuffer = null;
         System.setOut(originalSysOut);
@@ -44,7 +52,7 @@ class EndOfSaleViewTest {
     @Test
     public void testAmountToPay() throws InvalidItemIdentifierException, SaleNotActiveException {
         double total = 0;
-        ctrl.saleStart();
+        ctrl.saleStart(observers);
         total += registerNewItemTotal(2,4);
         total += registerNewItemTotal(3,8);
         total += registerNewItemTotal(1,10);
@@ -58,7 +66,7 @@ class EndOfSaleViewTest {
 
     @Test
     public void testEndOfSaleNoticed() throws InvalidItemIdentifierException, SaleNotActiveException {
-        ctrl.saleStart();
+        ctrl.saleStart(observers);
         ctrl.endSale();
         String printout = printoutBuffer.toString();
         String expectedPrintout = "Amount to pay: ";

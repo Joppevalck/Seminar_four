@@ -30,24 +30,27 @@ public class Controller {
      */
     public Controller(ExternalSystemCreator exSysCreator){
         this.exSysCreator = exSysCreator;
-
         this.saleLog = new SaleLog();
         this.register = new Register();
 
     }
 
     /**
-     * Calls for a new sale to start. Creates an instance of the sale class.
+     * Calls for a new sale to start. Creates an instance of the sale class. Adds the given observers.
+     *
+     * @param observers list of observers that are observing the sale started.
      */
-    public void saleStart(){
-        List<SaleObserver> observers = new ArrayList<>();
-        observers.add(new TotalRevenueView(this));
-        observers.add(new ScannedItemView(this));
-        observers.add(new EndOfSaleView(this));
+    public void saleStart(List<SaleObserver> observers){
         this.sale = new Sale();
         this.sale.addObservers(observers);
     }
 
+    /**
+     * Calls for a new sale to start. Creates an instance of the sale class.
+     */
+    public void saleStart(){
+        this.sale = new Sale();
+    }
     /**
      * Sends a request to add a item with the item identifier and quantity of the item.
      *
