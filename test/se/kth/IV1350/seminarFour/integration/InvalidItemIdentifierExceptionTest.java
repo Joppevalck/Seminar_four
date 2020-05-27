@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.controller.Controller;
+import se.kth.IV1350.seminarFour.controller.SaleNotStartedException;
 import se.kth.IV1350.seminarFour.model.SaleNotActiveException;
 
 import java.io.ByteArrayOutputStream;
@@ -35,18 +36,7 @@ class InvalidItemIdentifierExceptionTest {
         System.setOut(originalSysOut);
     }
 
-    @Test
-    public void testRightPrintout() throws SaleNotActiveException {
-        ctrl.saleStart();
-        ctrl.endSale();
-        ScannedItemDTO scannedItem = new ScannedItemDTO(0, 1);
-        String expectedOutput = "Item ID ("+scannedItem.getItemID()+") is invalid.";
-        try {
-            ctrl.registerItem(scannedItem);
-        }catch(InvalidItemIdentifierException e){
-            assertTrue(e.getMessage().contains(expectedOutput), "Wrong exception message");
-        }
-    }
+
 
     @Test
     public void testException() {

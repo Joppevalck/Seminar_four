@@ -51,16 +51,21 @@ public class Controller {
     public void saleStart(){
         this.sale = new Sale();
     }
+
     /**
      * Sends a request to add a item with the item identifier and quantity of the item.
      *
      * @param scannedItem contains the item identifier and quantity.
+     * @throws SaleNotActiveException is throw when there is no active sale to modify.
+     * @throws InvalidItemIdentifierException is thrown when an invalid item identifier is registered.
+     * @throws SaleNotStartedException is thrown when the sale has not started.
      */
-    public void registerItem(ScannedItemDTO scannedItem) throws SaleNotActiveException, InvalidItemIdentifierException {
+    public void registerItem(ScannedItemDTO scannedItem) throws SaleNotActiveException, InvalidItemIdentifierException,
+            SaleNotStartedException {
         try{
             addNewItem(scannedItem);
         } catch (NullPointerException Ne){
-            System.out.println("Sale not started, can not add items yet");
+            throw new SaleNotStartedException();
         }
 
     }
@@ -74,6 +79,7 @@ public class Controller {
 
     /**
      * Wraps up the sale and updates the sale information of how much the customer paid.
+     *
      * @param amountPaid what the customer paid.
      * @return the change for the customer.
      */
@@ -131,11 +137,15 @@ public class Controller {
         exSysCreator.getPrinter().printReceipt(receipt);
     }
 
-    public void discount(CustomerID customerID) throws SaleNotActiveException {
-        try {
+    /**
+     * Applies the discounts available for the specified customer ID.
+     *
+     * @param customerID the customer ID that will show which discounts that are available.
+     *
+     * @throws NoDiscountsException if the given customer ID does not have any discounts available.
+     * @throws SaleActiveException if the sale is active and not discount applicable.
+     */
+    public void discount(CustomerID customerID) throws NoDiscountsException, SaleActiveException {
             sale.discount(customerID);
-        } catch (NoDiscountsException e){
-            System.out.println(e.getMessage());
-        }
     }
 }

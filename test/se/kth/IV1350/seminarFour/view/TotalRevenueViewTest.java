@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import se.kth.IV1350.seminarFour.DTOPackage.ItemDTO;
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.controller.Controller;
+import se.kth.IV1350.seminarFour.controller.SaleNotStartedException;
 import se.kth.IV1350.seminarFour.integration.ExternalInventorySystem;
 import se.kth.IV1350.seminarFour.integration.ExternalSystemCreator;
 import se.kth.IV1350.seminarFour.integration.InvalidItemIdentifierException;
@@ -51,7 +52,8 @@ class TotalRevenueViewTest {
     }
 
     @Test
-    public void testRunningTotal() throws InvalidItemIdentifierException, SaleNotActiveException {
+    public void testRunningTotal() throws InvalidItemIdentifierException, SaleNotActiveException,
+            SaleNotStartedException {
         double runningTotal = 0;
         ctrl.saleStart(observers);
 
@@ -64,7 +66,7 @@ class TotalRevenueViewTest {
     }
 
     @Test
-    public void testTotalVAT() throws InvalidItemIdentifierException, SaleNotActiveException {
+    public void testTotalVAT() throws InvalidItemIdentifierException, SaleNotActiveException, SaleNotStartedException {
         double VAT = 0;
         ctrl.saleStart(observers);
 
@@ -86,7 +88,7 @@ class TotalRevenueViewTest {
     }
 
     private double registerNewItemRunningTotal(int itemID, int quantity) throws InvalidItemIdentifierException,
-            SaleNotActiveException {
+            SaleNotActiveException, SaleNotStartedException {
         ScannedItemDTO scannedItem = new ScannedItemDTO(itemID,quantity);
         ctrl.registerItem(scannedItem);
         return getItemInformation(scannedItem).getPrice() * quantity;
@@ -100,7 +102,7 @@ class TotalRevenueViewTest {
     }
 
     private double registerNewItemVAT(int itemID, int quantity) throws InvalidItemIdentifierException,
-            SaleNotActiveException {
+            SaleNotActiveException, SaleNotStartedException {
         ScannedItemDTO scannedItem = new ScannedItemDTO(itemID,quantity);
         ctrl.registerItem(scannedItem);
         ItemDTO item = getItemInformation(scannedItem);

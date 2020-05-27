@@ -71,10 +71,10 @@ class ViewTest {
     @Test
     public void testRunFakeExecutionEndSale(){
         instanceToTest.runFakeExecution();
-        String printout = printoutBuffer.toString();
 
         testEndSale();
     }
+
 
     private void testStartSale(){
         String expectedOutput = "started";

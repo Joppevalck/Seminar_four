@@ -8,6 +8,8 @@ import se.kth.IV1350.seminarFour.DTOPackage.ItemDTO;
 import se.kth.IV1350.seminarFour.DTOPackage.RevenueDTO;
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.controller.Controller;
+import se.kth.IV1350.seminarFour.controller.SaleNotStartedException;
+import se.kth.IV1350.seminarFour.model.SaleActiveException;
 import se.kth.IV1350.seminarFour.model.SaleNotActiveException;
 
 import java.io.ByteArrayOutputStream;
@@ -40,7 +42,8 @@ class BananaDiscountTest {
     }
 
     @Test
-    public void testRightPrice() throws InvalidItemIdentifierException, SaleNotActiveException {
+    public void testRightPrice() throws InvalidItemIdentifierException, SaleNotActiveException, SaleNotStartedException,
+            NoDiscountsException, SaleActiveException {
         ctrl.saleStart();
         ctrl.registerItem(new ScannedItemDTO(1,3));
         ctrl.registerItem(new ScannedItemDTO(2,4));

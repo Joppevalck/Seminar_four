@@ -25,7 +25,9 @@ public class ExternalInventorySystem {
      * This will get the iteminformation from the hardcoded database.
      *
      * @param scannedItem contains the item identifier which will select which item information will return.
+     *
      * @return resembles an item and the information about it.
+     *
      * @throws InvalidItemIdentifierException is thrown when an invalid item identifier is registered.
      */
     public ItemDTO getItemInformation(ScannedItemDTO scannedItem) throws InvalidItemIdentifierException {
@@ -34,11 +36,10 @@ public class ExternalInventorySystem {
             throw new InventorySystemFailureException("To developer: Could not get item information from inventory " +
                     "database, unable to connect. ItemID: " + itemID + " Date and time: " + LocalDateTime.now() + "\n");
         }
-
         try{
             return new ItemDTO(this.items[itemID - 1]);
         }catch(ArrayIndexOutOfBoundsException Ae){
-            throw new InvalidItemIdentifierException("Item ID ("+scannedItem.getItemID()+") is invalid. \n");
+            throw new InvalidItemIdentifierException(scannedItem.getItemID());
         }
     }
     

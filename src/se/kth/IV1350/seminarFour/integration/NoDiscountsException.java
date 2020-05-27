@@ -1,14 +1,11 @@
 package se.kth.IV1350.seminarFour.integration;
 
+/**
+ * This class is thrown when the given customer ID does not have any discounts available.
+ */
 public class NoDiscountsException extends Exception {
-    private final String message;
 
-    public NoDiscountsException(String message) {
-        this.message = message;
+    NoDiscountsException() {
     }
 
-    @Override
-    public String getMessage() {
-        return message;
-    }
 }

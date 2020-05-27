@@ -30,7 +30,7 @@ public class Sale {
         if(saleActive)
             saleInfo.addItem(itemAndQuantity);
         else{
-            throw new SaleNotActiveException("The sale is not active\n");
+            throw new SaleNotActiveException();
         }
     }
 
@@ -107,13 +107,21 @@ public class Sale {
         return getSaleInformation().getLastItemAdded();
     }
 
-    public void discount(CustomerID customerID) throws NoDiscountsException, SaleNotActiveException {
+    /**
+     * Applies a discount for the specified customer ID if there is any.
+     *
+     * @param customerID is the specefied customer ID.1
+     *
+     * @throws NoDiscountsException is thrown when there is no discount to be applied.
+     * @throws SaleActiveException is thrown when the sale is still active and not able to apply the discount.
+     */
+    public void discount(CustomerID customerID) throws NoDiscountsException, SaleActiveException {
 
         if(!saleActive) {
             this.saleInfo.discount(customerID);
             this.saleInfo.notifyEndOfSale();
         }else{
-            throw new SaleNotActiveException("The sale is still active\n");
+            throw new SaleActiveException();
         }
     }
 }

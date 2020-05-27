@@ -5,21 +5,20 @@ package se.kth.IV1350.seminarFour.integration;
  * external inventory system.
  */
 public class InvalidItemIdentifierException extends Exception {
-    private final String message;
+    private final int itemID;
 
     /**
-     * Creates a new instance of the class and stores a message to the user.
-     * @param message the message to the user.
+     * Creates a new instance of the class and stores a item identifier.
+     * @param itemID is the identifier that was invalid
      */
-    InvalidItemIdentifierException(String message) {
-        this.message = message;
+    InvalidItemIdentifierException(int itemID) {
+        this.itemID = itemID;
     }
 
     /**
-     * @return the exception message.
+     * @return the invalid item ID.
      */
-    @Override
-    public String getMessage() {
-        return message;
+    public int getItemID() {
+        return itemID;
     }
 }

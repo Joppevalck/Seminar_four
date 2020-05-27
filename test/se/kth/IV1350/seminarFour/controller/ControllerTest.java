@@ -49,7 +49,7 @@ class ControllerTest {
     }
 
     @Test
-    public void testAddAllItemID() throws InvalidItemIdentifierException, SaleNotActiveException {
+    public void testAddAllItemID() throws InvalidItemIdentifierException, SaleNotActiveException, SaleNotStartedException {
 
         instanceToTest.saleStart();
         for (int i = 1; i < 6; i++){
@@ -62,14 +62,12 @@ class ControllerTest {
         }
     }
     @Test
-    public void testRegisterItemWithoutSaleStart() throws InvalidItemIdentifierException, SaleNotActiveException {
+    public void testRegisterItemWithoutSaleStart() {
 
         ScannedItemDTO scannedItem = new ScannedItemDTO(1, 1);
-        instanceToTest.registerItem(scannedItem);
-        String printout = printoutBuffer.toString();
-        String expectedOutput = "Sale not started";
-        assertTrue(printout.contains(expectedOutput),
-                "RegisterItem went through without a saleStart.");
+        Assertions.assertThrows(SaleNotStartedException.class, () ->
+            instanceToTest.registerItem(scannedItem), "RegisterItem went through without a saleStart."
+        );
     }
 
     @Test

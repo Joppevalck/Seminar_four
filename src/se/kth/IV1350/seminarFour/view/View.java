@@ -3,7 +3,12 @@ package se.kth.IV1350.seminarFour.view;
 import se.kth.IV1350.seminarFour.DTOPackage.CustomerID;
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.controller.Controller;
+import se.kth.IV1350.seminarFour.controller.SaleNotStartedException;
+import se.kth.IV1350.seminarFour.integration.InvalidItemIdentifierException;
+import se.kth.IV1350.seminarFour.integration.InventorySystemFailureException;
 import se.kth.IV1350.seminarFour.integration.NoDiscountsException;
+import se.kth.IV1350.seminarFour.model.SaleActiveException;
+import se.kth.IV1350.seminarFour.model.SaleNotActiveException;
 import se.kth.IV1350.seminarFour.model.SaleObserver;
 
 import java.util.ArrayList;
@@ -79,8 +84,15 @@ public class View {
         ScannedItemDTO scannedItem = new ScannedItemDTO(itemID, quantity);
         try {
             this.ctrl.registerItem(scannedItem);
-        }catch(Exception e) {
-            System.out.println(e.getMessage());
+        }catch (SaleNotActiveException e) {
+            System.out.println("The sale is not active\n");
+        }catch (SaleNotStartedException e){
+            System.out.println("Sale not started, can not add items yet\n");
+        }catch (InvalidItemIdentifierException e){
+            System.out.println("Item ID ("+e.getItemID()+") is invalid. \n");
+        }catch (InventorySystemFailureException e){
+            System.out.println(e.getMessageToDeveloper());
+            System.out.println("Could not get information from database, please check your connection and try again\n");
         }
     }
 
@@ -96,8 +108,10 @@ public class View {
     private void runFakeDiscountSignal(int customerID){
         try {
             ctrl.discount(new CustomerID(customerID));
-        }catch(Exception e) {
-            System.out.println(e.getMessage());
+        }catch(SaleActiveException e) {
+            System.out.println("Sale is active, can not apply discount.\n");
+        }catch(NoDiscountsException e){
+            System.out.println("The given customer ID did not have any discounts available.\n");
         }
     }
 }

@@ -48,7 +48,7 @@ public class DiscountHandler {
                 discCalc = new AmountOfItemsDiscount();
                 break;
             default:
-                throw new NoDiscountsException("The given customer ID did not have any discounts available");
+                throw new NoDiscountsException();
         }
         discCalc.calculate(itemInventory);
     }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import se.kth.IV1350.seminarFour.DTOPackage.ItemDTO;
 import se.kth.IV1350.seminarFour.DTOPackage.ScannedItemDTO;
 import se.kth.IV1350.seminarFour.controller.Controller;
+import se.kth.IV1350.seminarFour.controller.SaleNotStartedException;
 import se.kth.IV1350.seminarFour.integration.ExternalInventorySystem;
 import se.kth.IV1350.seminarFour.integration.ExternalSystemCreator;
 import se.kth.IV1350.seminarFour.integration.InvalidItemIdentifierException;
@@ -50,7 +51,8 @@ class EndOfSaleViewTest {
     }
 
     @Test
-    public void testAmountToPay() throws InvalidItemIdentifierException, SaleNotActiveException {
+    public void testAmountToPay() throws InvalidItemIdentifierException, SaleNotActiveException,
+            SaleNotStartedException {
         double total = 0;
         ctrl.saleStart(observers);
         total += registerNewItemTotal(2,4);
@@ -78,7 +80,7 @@ class EndOfSaleViewTest {
     }
 
     private double registerNewItemTotal(int itemID, int quantity) throws InvalidItemIdentifierException,
-            SaleNotActiveException {
+            SaleNotActiveException, SaleNotStartedException {
         ScannedItemDTO scannedItem = new ScannedItemDTO(itemID,quantity);
         ctrl.registerItem(scannedItem);
         ItemDTO item = getItemInformation(scannedItem);
